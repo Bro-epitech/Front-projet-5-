@@ -13,7 +13,7 @@ let salt = bcrypt.genSaltSync(10);
 export default{
   data: function() {
       return{
-          mail: 'test@test.com',
+          mail: '',
           password:'',
         }
     },
@@ -26,7 +26,19 @@ export default{
         if (this.ValidateEmail(this.mail)){
           let hash = bcrypt.hashSync(this.password,salt)
           let compare = bcrypt.compareSync(this.password,hash);
-          this.$router.push('/skills');}
+          /*Stocker le token dans un local storage pour 30 jours: 
+          localStorage.setItem('token',valeur_du_token_réponse)
+          var hours = 24; // Reset when storage is more than 24hours
+          var now = new Date().getTime();
+          var setupTime = localStorage.getItem('setupTime');
+          if (setupTime == null) {
+            localStorage.setItem('setupTime', now)
+          } else {
+            if(now-setupTime > hours*60*60*1000) {
+              localStorage.clear()
+              localStorage.setItem('setupTime', now);
+            }
+                  }*/
   
         else {
               alert("Veuillez rentrer un email au format correct");
