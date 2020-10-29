@@ -7,10 +7,23 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 const bcrypt = require('bcryptjs');
 let salt = bcrypt.genSaltSync(10);
-
+var hours = 720; // Reset when storage is more than 24hours
+var now = new Date().getTime();
+var setupTime = localStorage.getItem('setupTime');
+if (setupTime == null) {
+  localStorage.setItem('setupTime', now)
+  } 
+else {
+  if(now-setupTime > hours*60*60*1000) {
+    localStorage.clear()
+localStorage.setItem('setupTime', now);
+  }
+}
 export default{
+
   data: function() {
       return{
           mail: '',
@@ -25,31 +38,23 @@ export default{
       signIn(){
         if (this.ValidateEmail(this.mail)){
           let hash = bcrypt.hashSync(this.password,salt)
-          /* si on veut comparer notre hashage avec un autre le mot de passe dans la base de donnée:
-          let compare = bcrypt.compareSync(this.password,hash);*/
-          /*Stocker le token dans un local storage pour 30 jours: 
-          localStorage.setItem('token',valeur_du_token_réponse)
-          var hours = 720; // Reset when storage is more than 24hours
-          var now = new Date().getTime();
-          var setupTime = localStorage.getItem('setupTime');
-          if (setupTime == null) {
-            localStorage.setItem('setupTime', now)
-          } else {
-            if(now-setupTime > hours*60*60*1000) {
-              localStorage.clear()
-              localStorage.setItem('setupTime', now);
+          axios
+            .get("/api/users?email=" + this.mail + "&password_hash=" + hash)
+            .then(response => this.responseUser = response.data.data)
+          var getData = 
+            {
+              userid: this.responseUser.id,
+              idrole: this.responseUser.roleid,
+              token:  this.responseUser.token
             }
-                  }*/
+          localStorage.setItem(this.mail,JSON.stringify(getData )) /*la clé est le mail */
+          }
+          
   
         else {
               alert("Veuillez rentrer un email au format correct");
               } 
-        /*axios
-        .get("route")
-        .then(response => this.responseUser = response.data.data)
-        this.userID = this.responseUser.id;
-        this.affichage = !(this.userID != 0);
-        this.active = this.userID != 0;*/
+        
       },
   }
 };
