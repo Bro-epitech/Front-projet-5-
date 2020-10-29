@@ -26,7 +26,22 @@ export default{
       },
       signUp(){
         if (this.ValidateEmail(this.mail) && this.passwordA == this.passwordB && this.passwordA != ''){
-          alert("ça marche")
+          let hash = bcrypt.hashSync(this.passwordA,salt)
+          axios
+           .post("/api/users/", {
+            'user':{
+            'password_hash':this.hash,
+            'email' :this.mail
+            }
+          })
+          .then(response => this.responseUser = response.data.data)
+          var getData = 
+            {
+              userid: this.responseUser.id,
+              idrole: this.responseUser.roleid,
+              token:  this.responseUser.token
+            }
+          localStorage.setItem(this.mail,JSON.stringify(getData ))
           }
 
         else {
