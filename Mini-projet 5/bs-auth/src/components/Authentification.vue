@@ -28,7 +28,7 @@ export default{
           let compare = bcrypt.compareSync(this.password,hash);
           /*Stocker le token dans un local storage pour 30 jours: 
           localStorage.setItem('token',valeur_du_token_réponse)
-          var hours = 24; // Reset when storage is more than 24hours
+          var hours = 720; // Reset when storage is more than 24hours
           var now = new Date().getTime();
           var setupTime = localStorage.getItem('setupTime');
           if (setupTime == null) {
