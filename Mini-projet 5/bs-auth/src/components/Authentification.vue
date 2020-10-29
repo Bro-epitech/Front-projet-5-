@@ -25,7 +25,8 @@ export default{
       signIn(){
         if (this.ValidateEmail(this.mail)){
           let hash = bcrypt.hashSync(this.password,salt)
-          let compare = bcrypt.compareSync(this.password,hash);
+          /* si on veut comparer notre hashage avec un autre le mot de passe dans la base de donnée:
+          let compare = bcrypt.compareSync(this.password,hash);*/
           /*Stocker le token dans un local storage pour 30 jours: 
           localStorage.setItem('token',valeur_du_token_réponse)
           var hours = 720; // Reset when storage is more than 24hours
